@@ -24,13 +24,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, autoplay 
         responsive: true,
         fluid: true,
         poster,
+        preload: 'auto',
         liveui: true,
         sources: [{
           src,
           type: 'application/x-mpegURL'
         }]
       }, () => {
-        console.log('player is ready');
+        console.log('Player corriendo');
       });
     } else if (playerRef.current) {
       const player = playerRef.current;

@@ -183,7 +183,13 @@ export default function App() {
                           <img src={channel.logo} alt={channel.name} className="w-full h-full object-cover" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-xl">{channel.name}</h3>
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-bold text-xl">{channel.name}</h3>
+                            <span className="flex items-center gap-1 bg-red-600 text-[10px] font-black px-1.5 py-0.5 rounded text-white animate-pulse">
+                              <span className="w-1.5 h-1.5 bg-white rounded-full" />
+                              LIVE
+                            </span>
+                          </div>
                           <p className="text-white/40 text-sm">{channel.description}</p>
                         </div>
                       </div>

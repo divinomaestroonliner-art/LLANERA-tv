@@ -38,18 +38,26 @@ export interface TVChannel {
 export const MOCK_CHANNELS: TVChannel[] = [
   {
     id: 'llanera-tv-plus',
-    name: 'Llanera TV+ Oficial',
-    logo: 'https://picsum.photos/seed/llano1/200/200',
-    streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    description: 'El corazón del llano en vivo 24/7.',
+    name: 'Llanera TV+',
+    logo: 'https://picsum.photos/seed/llaneratv/800/450',
+    streamUrl: 'https://tvspectro.moxapps.shop/live/22OeaFNKyCOwDoFdVOOAwrPDJkx1/index.m3u8',
+    description: 'Tu ventana al mundo llanero. Música, cultura y tradiciones en vivo.',
     isPremium: false,
   },
   {
-    id: 'joropo-vivo',
-    name: 'Joropo Vivo',
-    logo: 'https://picsum.photos/seed/llano2/200/200',
+    id: 'joropo-estelar',
+    name: 'Joropo Estelar',
+    logo: 'https://picsum.photos/seed/joropo/800/450',
     streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-    description: 'Música, danza y tradición llanera.',
+    description: 'Los grandes clásicos y las nuevas promesas del joropo.',
+    isPremium: true,
+  },
+  {
+    id: 'ecos-del-llano',
+    name: 'Ecos del Llano',
+    logo: 'https://picsum.photos/seed/nature/800/450',
+    streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    description: 'Naturaleza, leyendas y el alma de nuestra tierra.',
     isPremium: true,
   }
 ];
