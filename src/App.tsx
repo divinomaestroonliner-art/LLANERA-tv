@@ -7,11 +7,12 @@ import { BottomNav } from './components/BottomNav';
 import { VideoPlayer } from './components/VideoPlayer';
 import { MovieCarousel } from './components/MovieCarousel';
 import { tmdb, getImageUrl, Movie, MOCK_CHANNELS, TVChannel } from './services/tmdb';
-import { Star, Plus, Info, Play, Lock, ChevronRight, Search, Github, GitBranch, GitCommit } from 'lucide-react';
+import { Star, Plus, Info, Play, Lock, ChevronRight, Search, Github, GitBranch, GitCommit, Menu, X } from 'lucide-react';
 
 export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeTab, setActiveTab] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [trending, setTrending] = useState<Movie[]>([]);
   const [popular, setPopular] = useState<Movie[]>([]);
   const [topRated, setTopRated] = useState<Movie[]>([]);
@@ -89,12 +90,89 @@ export default function App() {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between bg-gradient-to-b from-llano-black to-transparent">
-        <Logo />
-        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-          <span className="text-sm font-bold">JD</span>
+      <header className="fixed top-0 left-0 right-0 z-40 px-6 py-4 flex items-center justify-between bg-gradient-to-b from-llano-black to-transparent backdrop-blur-sm md:backdrop-blur-none">
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 text-white"
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+          <Logo />
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-6 mr-6">
+            {['home', 'live', 'search', 'profile'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`text-sm font-bold uppercase tracking-widest transition-colors ${activeTab === tab ? 'text-llano-gold' : 'text-white/60 hover:text-white'}`}
+              >
+                {tab === 'home' ? 'Inicio' : tab === 'live' ? 'En Vivo' : tab === 'search' ? 'Búsqueda' : 'Perfil'}
+              </button>
+            ))}
+          </div>
+          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
+            <span className="text-sm font-bold">JD</span>
+          </div>
         </div>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-30 bg-llano-black/95 backdrop-blur-xl pt-24 px-6 md:hidden"
+          >
+            <div className="space-y-8">
+              {/* Mobile Search */}
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+                <input
+                  type="text"
+                  placeholder="Busca películas, series..."
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:border-llano-gold transition-colors"
+                />
+              </div>
+
+              {/* Mobile Nav Links */}
+              <nav className="space-y-4">
+                {[
+                  { id: 'home', label: 'Inicio', icon: Star },
+                  { id: 'live', label: 'En Vivo', icon: Play },
+                  { id: 'search', label: 'Búsqueda', icon: Search },
+                  { id: 'profile', label: 'Perfil', icon: Info },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActiveTab(item.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all ${activeTab === item.id ? 'bg-llano-gold/10 border-llano-gold text-llano-gold' : 'bg-white/5 border-white/10 text-white'}`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <item.icon className="w-5 h-5" />
+                      <span className="font-bold text-lg">{item.label}</span>
+                    </div>
+                    <ChevronRight className="w-5 h-5 opacity-40" />
+                  </button>
+                ))}
+              </nav>
+
+              <div className="pt-8 border-t border-white/10">
+                <button className="w-full bg-llano-gold text-llano-black py-4 rounded-2xl font-bold text-lg">
+                  Suscribirse a Premium
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="pt-20">
         <AnimatePresence mode="wait">
@@ -108,7 +186,7 @@ export default function App() {
             >
               {/* Hero Section */}
               {trending[0] && (
-                <section className="relative h-[70vh] w-full overflow-hidden">
+                <section className="relative h-[50vh] md:h-[70vh] w-full overflow-hidden">
                   <img
                     src={getImageUrl(trending[0].backdrop_path)}
                     alt={trending[0].title}
@@ -325,7 +403,7 @@ export default function App() {
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              className="bg-gradient-to-br from-llano-black to-white/5 border border-llano-gold/30 p-8 rounded-[2rem] max-w-md w-full text-center space-y-6 shadow-2xl shadow-llano-gold/10"
+              className="bg-gradient-to-br from-llano-black to-white/5 border border-llano-gold/30 p-6 md:p-8 rounded-[2rem] max-w-md w-full text-center space-y-6 shadow-2xl shadow-llano-gold/10"
             >
               <div className="w-20 h-20 bg-llano-gold/20 rounded-full flex items-center justify-center mx-auto border border-llano-gold/30">
                 <Lock className="w-10 h-10 text-llano-gold" />

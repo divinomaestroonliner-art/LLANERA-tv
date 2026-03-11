@@ -31,7 +31,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({ title, movies, onM
   };
 
   return (
-    <section className="px-6 space-y-4 relative group">
+    <section className="px-4 md:px-6 space-y-4 relative group">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">{title}</h2>
       </div>
@@ -54,7 +54,7 @@ export const MovieCarousel: React.FC<MovieCarouselProps> = ({ title, movies, onM
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-2"
+          className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory px-1 md:px-2"
         >
           {movies.map((movie) => (
             <motion.div
