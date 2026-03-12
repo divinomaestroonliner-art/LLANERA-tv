@@ -77,5 +77,49 @@ export const SPECIAL_MOVIES: Movie[] = [
     release_date: "2018-01-01",
     genre_ids: [18, 35],
     iframeUrl: "https://drive.google.com/file/d/1H18TBMd6xifSrGSez4yZWIZqy7aozrce/preview"
+  },
+  {
+    id: 999998,
+    title: "El príncipe encantador (2018)",
+    overview: "Un príncipe encantador debe encontrar a su verdadero amor antes de que se agote el tiempo.",
+    poster_path: "https://m.media-amazon.com/images/M/MV5BNDViY2E4MmEtZTQ4Ny00N2IxLWIxZmUtODYzOWYzMjc3OGI4XkEyXkFqcGc@._V1_.jpg",
+    backdrop_path: "https://m.media-amazon.com/images/M/MV5BNDViY2E4MmEtZTQ4Ny00N2IxLWIxZmUtODYzOWYzMjc3OGI4XkEyXkFqcGc@._V1_.jpg",
+    vote_average: 7.8,
+    release_date: "2018-01-01",
+    genre_ids: [16, 35, 10751],
+    iframeUrl: "https://drive.google.com/file/d/1zyDyWJbhL7gBJII0yFrLTOy2idgXBZOI/preview"
+  },
+  {
+    id: 999997,
+    title: "Rey león 2019",
+    overview: "Tras el asesinato de su padre, un joven león huye de su reino para aprender el verdadero significado de la responsabilidad y la valentía.",
+    poster_path: "https://lumiere-a.akamaihd.net/v1/images/image_8b5ca578.jpeg",
+    backdrop_path: "https://lumiere-a.akamaihd.net/v1/images/image_8b5ca578.jpeg",
+    vote_average: 8.0,
+    release_date: "2019-07-19",
+    genre_ids: [12, 10751, 18],
+    iframeUrl: "https://drive.google.com/file/d/1aE9KiO9galocFkkDtajFMNq6V0Q4pEUw/preview"
+  },
+  {
+    id: 999996,
+    title: "Mi mascota es un León (2018)",
+    overview: "Una joven entabla una amistad inusual con un león blanco y lucha por protegerlo de los cazadores.",
+    poster_path: "https://m.media-amazon.com/images/M/MV5BNjVlZjVhNjctMTFhYi00YzM5LThjNTctNGExMTlkZTFkOTQ1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    backdrop_path: "https://m.media-amazon.com/images/M/MV5BNjVlZjVhNjctMTFhYi00YzM5LThjNTctNGExMTlkZTFkOTQ1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    vote_average: 7.5,
+    release_date: "2018-12-26",
+    genre_ids: [12, 18, 10751],
+    iframeUrl: "https://drive.google.com/file/d/1dgHVRLqCPs1BE-yhUjziEdll2-7r4cTk/preview"
+  },
+  {
+    id: 999995,
+    title: "Cuentos que no son cuento (2008)",
+    overview: "La vida de un botones de hotel cambia para siempre cuando los cuentos que les cuenta a sus sobrinos empiezan a hacerse realidad.",
+    poster_path: "https://play-lh.googleusercontent.com/AAcmT65Ri3uz_ADH4xkq7q48kGpICw2Oj4YzsHDRkt_YzYtfwyQJ-VOtnE8rXmo0A6Un",
+    backdrop_path: "https://play-lh.googleusercontent.com/AAcmT65Ri3uz_ADH4xkq7q48kGpICw2Oj4YzsHDRkt_YzYtfwyQJ-VOtnE8rXmo0A6Un",
+    vote_average: 6.1,
+    release_date: "2008-12-24",
+    genre_ids: [14, 35, 10751],
+    iframeUrl: "https://drive.google.com/file/d/1M2ibQsokuJSq3cziR3sHV06JnayF8KHn/preview"
   }
 ];
