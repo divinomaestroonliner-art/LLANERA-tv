@@ -6,8 +6,8 @@ import { WelcomeScreen } from './components/WelcomeScreen';
 import { BottomNav } from './components/BottomNav';
 import { VideoPlayer } from './components/VideoPlayer';
 import { MovieCarousel } from './components/MovieCarousel';
-import { tmdb, getImageUrl, Movie, MOCK_CHANNELS, TVChannel } from './services/tmdb';
-import { Star, Plus, Info, Play, Lock, ChevronRight, Search, Github, GitBranch, GitCommit, Menu, X } from 'lucide-react';
+import { tmdb, getImageUrl, Movie, MOCK_CHANNELS, TVChannel, SPECIAL_MOVIES } from './services/tmdb';
+import { Star, Plus, Info, Play, Lock, ChevronRight, Search, Github, GitBranch, GitCommit, Menu, X, ArrowLeft } from 'lucide-react';
 
 export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -17,6 +17,7 @@ export default function App() {
   const [popular, setPopular] = useState<Movie[]>([]);
   const [topRated, setTopRated] = useState<Movie[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [playingIframeUrl, setPlayingIframeUrl] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [buildInfo, setBuildInfo] = useState<{ branch: string, commit: string } | null>(null);
@@ -76,8 +77,13 @@ export default function App() {
     if (!isSubscribed && (content.isPremium || Math.random() > 0.7)) {
       setShowPaywall(true);
     } else {
-      // In a real app, navigate to player
-      alert('Reproduciendo: ' + (content.title || content.name));
+      if (content.iframeUrl) {
+        setPlayingIframeUrl(content.iframeUrl);
+        setSelectedMovie(content);
+      } else {
+        // In a real app, navigate to player
+        alert('Reproduciendo: ' + (content.title || content.name));
+      }
     }
   };
 
@@ -223,6 +229,12 @@ export default function App() {
               )}
 
               {/* Movie Rows */}
+              <MovieCarousel 
+                title="Estrenos Especiales" 
+                movies={SPECIAL_MOVIES} 
+                onMovieClick={handlePlay} 
+              />
+
               <MovieCarousel 
                 title="Recomendados para ti" 
                 movies={trending} 
@@ -390,6 +402,38 @@ export default function App() {
       </main>
 
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      {/* Iframe Player Overlay */}
+      <AnimatePresence>
+        {playingIframeUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-llano-black flex flex-col"
+          >
+            <div className="p-4 flex items-center gap-4 bg-gradient-to-b from-llano-black to-transparent">
+              <button 
+                onClick={() => setPlayingIframeUrl(null)}
+                className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+              >
+                <ArrowLeft className="w-6 h-6" />
+              </button>
+              <h2 className="text-xl font-bold truncate">{selectedMovie?.title}</h2>
+            </div>
+            <div className="flex-1 flex items-center justify-center p-4 md:p-10">
+              <div className="relative w-full max-w-5xl aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                <iframe 
+                  src={playingIframeUrl} 
+                  className="absolute inset-0 w-full h-full"
+                  allow="autoplay; fullscreen"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Paywall Modal */}
       <AnimatePresence>

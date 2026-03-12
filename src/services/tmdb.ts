@@ -12,8 +12,12 @@ export const tmdb = axios.create({
   },
 });
 
-export const getImageUrl = (path: string | null) => 
-  path ? `${IMAGE_BASE_URL}${path}` : 'https://via.placeholder.com/500x750?text=No+Image';
+export const getImageUrl = (path: string | null) => {
+  if (!path) return 'https://via.placeholder.com/500x750?text=No+Image';
+  if (path === '/super-maestra-poster.jpg') return 'https://picsum.photos/seed/teacher/500/750';
+  if (path === '/super-maestra-backdrop.jpg') return 'https://picsum.photos/seed/school/1280/720';
+  return `${IMAGE_BASE_URL}${path}`;
+};
 
 export interface Movie {
   id: number;
@@ -24,6 +28,7 @@ export interface Movie {
   vote_average: number;
   release_date: string;
   genre_ids: number[];
+  iframeUrl?: string;
 }
 
 export interface TVChannel {
@@ -59,5 +64,19 @@ export const MOCK_CHANNELS: TVChannel[] = [
     streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
     description: 'Naturaleza, leyendas y el alma de nuestra tierra.',
     isPremium: true,
+  }
+];
+
+export const SPECIAL_MOVIES: Movie[] = [
+  {
+    id: 999999,
+    title: "Las aventuras de una Super Maestra (2018)",
+    overview: "Una maestra excepcional vive aventuras inolvidables mientras inspira a sus alumnos.",
+    poster_path: "/super-maestra-poster.jpg",
+    backdrop_path: "/super-maestra-backdrop.jpg",
+    vote_average: 8.5,
+    release_date: "2018-01-01",
+    genre_ids: [18, 35],
+    iframeUrl: "https://drive.google.com/file/d/1H18TBMd6xifSrGSez4yZWIZqy7aozrce/preview"
   }
 ];
