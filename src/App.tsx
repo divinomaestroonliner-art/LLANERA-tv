@@ -428,6 +428,7 @@ export default function App() {
                   className="absolute inset-0 w-full h-full"
                   allow="autoplay; fullscreen"
                   allowFullScreen
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
                 ></iframe>
               </div>
             </div>

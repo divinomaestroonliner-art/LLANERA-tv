@@ -14,8 +14,7 @@ export const tmdb = axios.create({
 
 export const getImageUrl = (path: string | null) => {
   if (!path) return 'https://via.placeholder.com/500x750?text=No+Image';
-  if (path === '/super-maestra-poster.jpg') return 'https://picsum.photos/seed/teacher/500/750';
-  if (path === '/super-maestra-backdrop.jpg') return 'https://picsum.photos/seed/school/1280/720';
+  if (path.startsWith('http')) return path;
   return `${IMAGE_BASE_URL}${path}`;
 };
 
@@ -72,8 +71,8 @@ export const SPECIAL_MOVIES: Movie[] = [
     id: 999999,
     title: "Las aventuras de una Super Maestra (2018)",
     overview: "Una maestra excepcional vive aventuras inolvidables mientras inspira a sus alumnos.",
-    poster_path: "/super-maestra-poster.jpg",
-    backdrop_path: "/super-maestra-backdrop.jpg",
+    poster_path: "https://m.media-amazon.com/images/S/pv-target-images/49f3bfb9077b0ce17d1f76a42f432c4ad7587841a9c6d353bf0f3dfee7bc8e5f.jpg",
+    backdrop_path: "https://m.media-amazon.com/images/S/pv-target-images/49f3bfb9077b0ce17d1f76a42f432c4ad7587841a9c6d353bf0f3dfee7bc8e5f.jpg",
     vote_average: 8.5,
     release_date: "2018-01-01",
     genre_ids: [18, 35],
