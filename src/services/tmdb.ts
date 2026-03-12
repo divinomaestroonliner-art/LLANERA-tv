@@ -132,5 +132,16 @@ export const SPECIAL_MOVIES: Movie[] = [
     release_date: "2002-05-24",
     genre_ids: [18, 36, 10752],
     iframeUrl: "https://drive.google.com/file/d/1rYTrumLCagmK18SW4wRSlh5-riPiGD78/preview"
+  },
+  {
+    id: 999993,
+    title: "Aladdin (2019)",
+    overview: "Un joven callejero de buen corazón y un visir hambriento de poder compiten por una lámpara mágica que tiene el poder de hacer realidad sus deseos más profundos.",
+    poster_path: "https://m.media-amazon.com/images/M/MV5BZDVjNzBkOGUtZTE4NS00OWMxLWE5ODktMTNkNDgwYzNhNjg4XkEyXkFqcGc@._V1_.jpg",
+    backdrop_path: "https://m.media-amazon.com/images/M/MV5BZDVjNzBkOGUtZTE4NS00OWMxLWE5ODktMTNkNDgwYzNhNjg4XkEyXkFqcGc@._V1_.jpg",
+    vote_average: 7.1,
+    release_date: "2019-05-22",
+    genre_ids: [12, 14, 10751, 35, 10749],
+    iframeUrl: "https://drive.google.com/file/d/1YoC5URIipY3qVEWC_GSv7DCwaEAu2Tx-/preview"
   }
 ];
