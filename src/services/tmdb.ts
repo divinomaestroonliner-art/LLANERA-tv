@@ -121,5 +121,16 @@ export const SPECIAL_MOVIES: Movie[] = [
     release_date: "2008-12-24",
     genre_ids: [14, 35, 10751],
     iframeUrl: "https://drive.google.com/file/d/1M2ibQsokuJSq3cziR3sHV06JnayF8KHn/preview"
+  },
+  {
+    id: 999994,
+    title: "El pianista (2002)",
+    overview: "Un brillante pianista polaco de origen judío vive en el gueto de Varsovia durante la Segunda Guerra Mundial.",
+    poster_path: "https://m.media-amazon.com/images/M/MV5BMjEwNmEwYjgtNTk3ZC00NjljLTg5ZDctZTY3ZGQwZjRkZmQxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    backdrop_path: "https://m.media-amazon.com/images/M/MV5BMjEwNmEwYjgtNTk3ZC00NjljLTg5ZDctZTY3ZGQwZjRkZmQxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    vote_average: 8.5,
+    release_date: "2002-05-24",
+    genre_ids: [18, 36, 10752],
+    iframeUrl: "https://drive.google.com/file/d/1rYTrumLCagmK18SW4wRSlh5-riPiGD78/preview"
   }
 ];
