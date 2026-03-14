@@ -151,6 +151,18 @@ export const SPECIAL_MOVIES: Movie[] = [
     genre_ids: [12, 14, 10751, 35, 10749],
     iframeUrl: "https://drive.google.com/file/d/1YoC5URIipY3qVEWC_GSv7DCwaEAu2Tx-/preview",
     type: 'movie'
+  },
+  {
+    id: 999992,
+    title: "Lino una aventura con siete vidas (2017)",
+    overview: "Lino es un animador de fiestas que no aguanta más su vida, hasta que decide buscar ayuda de un hechicero para cambiar las cosas.",
+    poster_path: "https://m.media-amazon.com/images/M/MV5BZGZiMDhjYWUtOWRjOC00YTk3LWE0MzItYjZhMTIxZDUyYmQyXkEyXkFqcGc@._V1_.jpg",
+    backdrop_path: "https://m.media-amazon.com/images/M/MV5BZGZiMDhjYWUtOWRjOC00YTk3LWE0MzItYjZhMTIxZDUyYmQyXkEyXkFqcGc@._V1_.jpg",
+    vote_average: 7.0,
+    release_date: "2017-09-14",
+    genre_ids: [16, 35, 10751],
+    iframeUrl: "https://drive.google.com/file/d/1lmPRnx_jB4f1wGVL5r9LMovYPerUS1Zp/preview",
+    type: 'movie'
   }
 ];
 
