@@ -156,12 +156,12 @@ export const SPECIAL_MOVIES: Movie[] = [
     id: 999992,
     title: "Lino una aventura con siete vidas (2017)",
     overview: "Lino es un animador de fiestas que no aguanta más su vida, hasta que decide buscar ayuda de un hechicero para cambiar las cosas.",
-    poster_path: "https://m.media-amazon.com/images/M/MV5BZGZiMDhjYWUtOWRjOC00YTk3LWE0MzItYjZhMTIxZDUyYmQyXkEyXkFqcGc@._V1_.jpg",
-    backdrop_path: "https://m.media-amazon.com/images/M/MV5BZGZiMDhjYWUtOWRjOC00YTk3LWE0MzItYjZhMTIxZDUyYmQyXkEyXkFqcGc@._V1_.jpg",
+    poster_path: "https://pics.filmaffinity.com/Dummie_the_Mummy_and_the_Tomb_of_Achnetut-130461041-large.jpg",
+    backdrop_path: "https://pics.filmaffinity.com/Dummie_the_Mummy_and_the_Tomb_of_Achnetut-130461041-large.jpg",
     vote_average: 7.0,
     release_date: "2017-09-14",
     genre_ids: [16, 35, 10751],
-    iframeUrl: "https://drive.google.com/file/d/1lmPRnx_jB4f1wGVL5r9LMovYPerUS1Zp/preview",
+    iframeUrl: "https://drive.google.com/file/d/11nPhfqC-j5nYE05mmYKZgWlLWBaIhOee/preview",
     type: 'movie'
   }
 ];

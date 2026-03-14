@@ -39,7 +39,16 @@ function AppContent() {
         ]);
         
         setTrending(trendingRes.data.results.slice(0, 10));
-        setPopular(popularRes.data.results.slice(0, 10));
+        
+        // Prepend the new movie to popular list
+        const linoMovie = SPECIAL_MOVIES.find(m => m.id === 999992);
+        const popularList = popularRes.data.results.slice(0, 9);
+        if (linoMovie) {
+          setPopular([linoMovie, ...popularList]);
+        } else {
+          setPopular(popularRes.data.results.slice(0, 10));
+        }
+        
         setTopRated(topRatedRes.data.results.slice(0, 10));
       } catch (error) {
         console.error('Error fetching data:', error);
