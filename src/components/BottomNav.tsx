@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Tv, Search, User } from 'lucide-react';
+import { Home, Tv, ShoppingBag, Search, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface BottomNavProps {
@@ -11,6 +11,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab })
   const tabs = [
     { id: 'home', icon: Home, label: 'Inicio' },
     { id: 'live', icon: Tv, label: 'En Vivo' },
+    { id: 'store', icon: ShoppingBag, label: 'Tienda' },
     { id: 'search', icon: Search, label: 'Búsqueda' },
     { id: 'profile', icon: User, label: 'Perfil' },
   ];

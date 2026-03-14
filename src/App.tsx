@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Logo } from './components/Logo';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { BottomNav } from './components/BottomNav';
-import { VideoPlayer } from './components/VideoPlayer';
+import { VideoPlayer as MoviePlayer } from './components/VideoPlayer';
 import { MovieCarousel } from './components/MovieCarousel';
 import { tmdb, getImageUrl, Movie, MOCK_CHANNELS, TVChannel, SPECIAL_MOVIES } from './services/tmdb';
-import { Star, Plus, Info, Play, Lock, ChevronRight, Search, Github, GitBranch, GitCommit, Menu, X, ArrowLeft } from 'lucide-react';
+import { Star, Plus, Info, Play, Lock, ChevronRight, Search, Github, GitBranch, GitCommit, Menu, X, ArrowLeft, LogIn, LogOut, ShoppingBag } from 'lucide-react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-export default function App() {
+function AppContent() {
+  const { user, profile, loading: authLoading, signIn, logout } = useAuth();
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeTab, setActiveTab] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,10 +19,10 @@ export default function App() {
   const [popular, setPopular] = useState<Movie[]>([]);
   const [topRated, setTopRated] = useState<Movie[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [playingIframeUrl, setPlayingIframeUrl] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [buildInfo, setBuildInfo] = useState<{ branch: string, commit: string } | null>(null);
+
+  const isSubscribed = profile?.subscriptionActive;
 
   useEffect(() => {
     // Show welcome screen for 5 seconds
@@ -74,16 +76,18 @@ export default function App() {
   }, []);
 
   const handlePlay = (content: any) => {
-    if (!isSubscribed && (content.isPremium || Math.random() > 0.7)) {
+    if (!user) {
+      signIn();
+      return;
+    }
+
+    // Live channels and store are free
+    const isFree = content.streamUrl || activeTab === 'live';
+    
+    if (!isSubscribed && !isFree) {
       setShowPaywall(true);
     } else {
-      if (content.iframeUrl) {
-        setPlayingIframeUrl(content.iframeUrl);
-        setSelectedMovie(content);
-      } else {
-        // In a real app, navigate to player
-        alert('Reproduciendo: ' + (content.title || content.name));
-      }
+      setSelectedMovie(content);
     }
   };
 
@@ -118,8 +122,33 @@ export default function App() {
               </button>
             ))}
           </div>
-          <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10">
-            <span className="text-sm font-bold">JD</span>
+          <div className="flex items-center gap-4">
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="hidden md:block text-right">
+                  <p className="text-xs font-bold text-white/40 uppercase tracking-widest">Bienvenido</p>
+                  <p className="text-sm font-bold text-white">{user.displayName?.split(' ')[0]}</p>
+                </div>
+                <button 
+                  onClick={() => setActiveTab('profile')}
+                  className="w-10 h-10 rounded-full bg-llano-gold/20 flex items-center justify-center border border-llano-gold/30 overflow-hidden"
+                >
+                  {user.photoURL ? (
+                    <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-sm font-bold text-llano-gold">{user.displayName?.charAt(0)}</span>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={signIn}
+                className="flex items-center gap-2 bg-llano-gold text-llano-black px-4 py-2 rounded-full font-bold text-sm hover:scale-105 transition-transform"
+              >
+                <LogIn className="w-4 h-4" />
+                Ingresar
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -171,9 +200,19 @@ export default function App() {
               </nav>
 
               <div className="pt-8 border-t border-white/10">
-                <button className="w-full bg-llano-gold text-llano-black py-4 rounded-2xl font-bold text-lg">
-                  Suscribirse a Premium
-                </button>
+                {!isSubscribed ? (
+                  <button className="w-full bg-llano-gold text-llano-black py-4 rounded-2xl font-bold text-lg">
+                    Suscribirse a Premium
+                  </button>
+                ) : (
+                  <button 
+                    onClick={logout}
+                    className="w-full bg-white/5 border border-white/10 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    Cerrar Sesión
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>
@@ -289,7 +328,46 @@ export default function App() {
                         </span>
                       )}
                     </div>
-                    <VideoPlayer src={channel.streamUrl} poster={channel.logo} />
+                    <MoviePlayer movie={{
+                      id: parseInt(channel.id.replace(/\D/g, '')) || 0,
+                      title: channel.name,
+                      overview: channel.description,
+                      poster_path: channel.logo,
+                      backdrop_path: channel.logo,
+                      vote_average: 0,
+                      release_date: '',
+                      genre_ids: [],
+                      iframeUrl: channel.streamUrl,
+                      type: 'movie'
+                    }} onClose={() => {}} onSelectMovie={() => {}} isFree={true} />
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === 'store' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-8 pt-20 px-6"
+            >
+              <div className="text-center space-y-4">
+                <div className="w-20 h-20 bg-llano-gold/20 rounded-full flex items-center justify-center mx-auto border border-llano-gold/30">
+                  <ShoppingBag className="w-10 h-10 text-llano-gold" />
+                </div>
+                <h2 className="text-3xl font-bold">Tienda Llanera</h2>
+                <p className="text-white/60 max-w-md mx-auto">
+                  Próximamente: Compra productos exclusivos, merchandising y acceso a eventos especiales.
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3 animate-pulse">
+                    <div className="aspect-square bg-white/10 rounded-xl" />
+                    <div className="h-4 bg-white/10 rounded w-3/4" />
+                    <div className="h-4 bg-white/10 rounded w-1/2" />
                   </div>
                 ))}
               </div>
@@ -334,12 +412,18 @@ export default function App() {
               <div className="flex flex-col items-center gap-4 pt-10">
                 <div className="w-32 h-32 rounded-full bg-gradient-to-br from-llano-gold to-llano-sunset p-1">
                   <div className="w-full h-full rounded-full bg-llano-black flex items-center justify-center overflow-hidden border-4 border-llano-black">
-                    <img src="https://picsum.photos/seed/user/200/200" alt="Profile" className="w-full h-full object-cover" />
+                    {user?.photoURL ? (
+                      <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="text-4xl font-bold text-llano-gold">{user?.displayName?.charAt(0) || 'U'}</div>
+                    )}
                   </div>
                 </div>
                 <div className="text-center">
-                  <h2 className="text-3xl font-bold">Juan del Llano</h2>
-                  <p className="text-llano-gold font-medium">Plan Premium</p>
+                  <h2 className="text-3xl font-bold">{user?.displayName || 'Usuario'}</h2>
+                  <p className={`font-medium ${isSubscribed ? 'text-llano-gold' : 'text-white/40'}`}>
+                    {isSubscribed ? 'Plan Premium' : 'Plan Gratuito'}
+                  </p>
                 </div>
               </div>
 
@@ -359,6 +443,20 @@ export default function App() {
                     <ChevronRight className="text-white/20" />
                   </button>
                 ))}
+                
+                {user && (
+                  <button 
+                    onClick={logout}
+                    className="flex items-center justify-between p-4 rounded-2xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition-colors text-red-500"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 rounded-lg bg-red-500/10">
+                        <LogOut className="w-6 h-6" />
+                      </div>
+                      <span className="font-bold">Cerrar Sesión</span>
+                    </div>
+                  </button>
+                )}
               </div>
 
               {/* Build Info Section */}
@@ -405,33 +503,18 @@ export default function App() {
 
       {/* Iframe Player Overlay */}
       <AnimatePresence>
-        {playingIframeUrl && (
+        {selectedMovie && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[60] bg-llano-black flex flex-col"
           >
-            <div className="p-4 flex items-center gap-4 bg-gradient-to-b from-llano-black to-transparent">
-              <button 
-                onClick={() => setPlayingIframeUrl(null)}
-                className="p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
-              >
-                <ArrowLeft className="w-6 h-6" />
-              </button>
-              <h2 className="text-xl font-bold truncate">{selectedMovie?.title}</h2>
-            </div>
-            <div className="flex-1 flex items-center justify-center p-4 md:p-10">
-              <div className="relative w-full max-w-5xl aspect-video rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                <iframe 
-                  src={playingIframeUrl} 
-                  className="absolute inset-0 w-full h-full"
-                  allow="autoplay; fullscreen"
-                  allowFullScreen
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
-                ></iframe>
-              </div>
-            </div>
+            <MoviePlayer 
+              movie={selectedMovie} 
+              onClose={() => setSelectedMovie(null)} 
+              onSelectMovie={(movie) => setSelectedMovie(movie)}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -464,13 +547,24 @@ export default function App() {
                 <p className="text-sm text-white/40">Cancela en cualquier momento</p>
               </div>
               <button
-                onClick={() => {
-                  setIsSubscribed(true);
-                  setShowPaywall(false);
+                onClick={async () => {
+                  if (!user) {
+                    await signIn();
+                  }
+                  // Simulate payment activation
+                  if (user) {
+                    const { doc, updateDoc } = await import('firebase/firestore');
+                    const { db } = await import('./firebase');
+                    await updateDoc(doc(db, 'users', user.uid), {
+                      subscriptionActive: true,
+                      planType: 'monthly'
+                    });
+                    setShowPaywall(false);
+                  }
                 }}
                 className="w-full bg-llano-gold text-llano-black py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform"
               >
-                Suscribirme Ahora
+                {user ? 'Suscribirme Ahora' : 'Ingresar para Suscribirse'}
               </button>
               <button
                 onClick={() => setShowPaywall(false)}
@@ -483,6 +577,14 @@ export default function App() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

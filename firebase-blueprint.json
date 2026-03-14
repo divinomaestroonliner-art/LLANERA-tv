@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and subscription status",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "subscriptionActive": { "type": "boolean" },
+        "subscriptionExpiry": { "type": "string", "format": "date-time" },
+        "planType": { "type": "string", "enum": ["none", "monthly", "yearly"] }
+      },
+      "required": ["email", "subscriptionActive"]
+    },
+    "PlaybackProgress": {
+      "title": "PlaybackProgress",
+      "description": "Saves the last position of a movie or series for a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "contentId": { "type": "string" },
+        "seconds": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "contentId", "seconds", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/users/{userId}/progress/{contentId}": {
+      "schema": "PlaybackProgress",
+      "description": "Playback progress per user and content"
+    }
+  }
+}

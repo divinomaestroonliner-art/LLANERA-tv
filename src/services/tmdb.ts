@@ -28,6 +28,7 @@ export interface Movie {
   release_date: string;
   genre_ids: number[];
   iframeUrl?: string;
+  type: 'movie' | 'series';
 }
 
 export interface TVChannel {
@@ -54,7 +55,7 @@ export const MOCK_CHANNELS: TVChannel[] = [
     logo: 'https://picsum.photos/seed/joropo/800/450',
     streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
     description: 'Los grandes clásicos y las nuevas promesas del joropo.',
-    isPremium: true,
+    isPremium: false,
   },
   {
     id: 'ecos-del-llano',
@@ -62,7 +63,7 @@ export const MOCK_CHANNELS: TVChannel[] = [
     logo: 'https://picsum.photos/seed/nature/800/450',
     streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
     description: 'Naturaleza, leyendas y el alma de nuestra tierra.',
-    isPremium: true,
+    isPremium: false,
   }
 ];
 
@@ -76,7 +77,8 @@ export const SPECIAL_MOVIES: Movie[] = [
     vote_average: 8.5,
     release_date: "2018-01-01",
     genre_ids: [18, 35],
-    iframeUrl: "https://drive.google.com/file/d/1H18TBMd6xifSrGSez4yZWIZqy7aozrce/preview"
+    iframeUrl: "https://drive.google.com/file/d/1H18TBMd6xifSrGSez4yZWIZqy7aozrce/preview",
+    type: 'movie'
   },
   {
     id: 999998,
@@ -87,7 +89,8 @@ export const SPECIAL_MOVIES: Movie[] = [
     vote_average: 7.8,
     release_date: "2018-01-01",
     genre_ids: [16, 35, 10751],
-    iframeUrl: "https://drive.google.com/file/d/1zyDyWJbhL7gBJII0yFrLTOy2idgXBZOI/preview"
+    iframeUrl: "https://drive.google.com/file/d/1zyDyWJbhL7gBJII0yFrLTOy2idgXBZOI/preview",
+    type: 'movie'
   },
   {
     id: 999997,
@@ -98,7 +101,8 @@ export const SPECIAL_MOVIES: Movie[] = [
     vote_average: 8.0,
     release_date: "2019-07-19",
     genre_ids: [12, 10751, 18],
-    iframeUrl: "https://drive.google.com/file/d/1aE9KiO9galocFkkDtajFMNq6V0Q4pEUw/preview"
+    iframeUrl: "https://drive.google.com/file/d/1aE9KiO9galocFkkDtajFMNq6V0Q4pEUw/preview",
+    type: 'movie'
   },
   {
     id: 999996,
@@ -109,7 +113,8 @@ export const SPECIAL_MOVIES: Movie[] = [
     vote_average: 7.5,
     release_date: "2018-12-26",
     genre_ids: [12, 18, 10751],
-    iframeUrl: "https://drive.google.com/file/d/1dgHVRLqCPs1BE-yhUjziEdll2-7r4cTk/preview"
+    iframeUrl: "https://drive.google.com/file/d/1dgHVRLqCPs1BE-yhUjziEdll2-7r4cTk/preview",
+    type: 'movie'
   },
   {
     id: 999995,
@@ -120,7 +125,8 @@ export const SPECIAL_MOVIES: Movie[] = [
     vote_average: 6.1,
     release_date: "2008-12-24",
     genre_ids: [14, 35, 10751],
-    iframeUrl: "https://drive.google.com/file/d/1M2ibQsokuJSq3cziR3sHV06JnayF8KHn/preview"
+    iframeUrl: "https://drive.google.com/file/d/1M2ibQsokuJSq3cziR3sHV06JnayF8KHn/preview",
+    type: 'movie'
   },
   {
     id: 999994,
@@ -131,7 +137,8 @@ export const SPECIAL_MOVIES: Movie[] = [
     vote_average: 8.5,
     release_date: "2002-05-24",
     genre_ids: [18, 36, 10752],
-    iframeUrl: "https://drive.google.com/file/d/1rYTrumLCagmK18SW4wRSlh5-riPiGD78/preview"
+    iframeUrl: "https://drive.google.com/file/d/1rYTrumLCagmK18SW4wRSlh5-riPiGD78/preview",
+    type: 'movie'
   },
   {
     id: 999993,
@@ -142,6 +149,15 @@ export const SPECIAL_MOVIES: Movie[] = [
     vote_average: 7.1,
     release_date: "2019-05-22",
     genre_ids: [12, 14, 10751, 35, 10749],
-    iframeUrl: "https://drive.google.com/file/d/1YoC5URIipY3qVEWC_GSv7DCwaEAu2Tx-/preview"
+    iframeUrl: "https://drive.google.com/file/d/1YoC5URIipY3qVEWC_GSv7DCwaEAu2Tx-/preview",
+    type: 'movie'
   }
 ];
+
+export const getRecommendations = (currentMovie: Movie): Movie[] => {
+  return SPECIAL_MOVIES.filter(m => 
+    m.id !== currentMovie.id && 
+    m.genre_ids.some(id => currentMovie.genre_ids.includes(id))
+  ).slice(0, 4);
+};
+
