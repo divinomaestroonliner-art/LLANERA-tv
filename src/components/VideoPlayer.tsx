@@ -14,16 +14,14 @@ interface VideoPlayerProps {
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({ movie, onClose, onSelectMovie, isFree = false }) => {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [initialTime, setInitialTime] = useState(0);
   const [loading, setLoading] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  const isSubscribed = profile?.subscriptionActive || isFree;
-
   useEffect(() => {
-    if (!user || !isSubscribed) {
+    if (!user) {
       setLoading(false);
       return;
     }
@@ -53,7 +51,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ movie, onClose, onSele
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [user, movie.id, isSubscribed]);
+  }, [user, movie.id]);
 
   // Recommendations logic
   const recommendations = getRecommendations(movie);
@@ -77,24 +75,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ movie, onClose, onSele
   };
 
   if (loading) return <div className="flex items-center justify-center h-full">Cargando...</div>;
-
-  if (!isSubscribed) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full bg-black/90 text-white p-8 text-center">
-        <Lock className="w-16 h-16 mb-4 text-yellow-500" />
-        <h2 className="text-3xl font-bold mb-4">Contenido Exclusivo</h2>
-        <p className="text-gray-400 mb-8 max-w-md">
-          Esta película requiere una suscripción activa. Suscríbete ahora para acceder a todo nuestro catálogo de películas y series.
-        </p>
-        <button 
-          className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-full transition-colors"
-          onClick={() => window.location.href = '/tienda'}
-        >
-          Ver Planes de Membresía
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div className="relative w-full h-full bg-black">

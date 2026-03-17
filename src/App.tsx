@@ -19,10 +19,7 @@ function AppContent() {
   const [popular, setPopular] = useState<Movie[]>([]);
   const [topRated, setTopRated] = useState<Movie[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [showPaywall, setShowPaywall] = useState(false);
   const [buildInfo, setBuildInfo] = useState<{ branch: string, commit: string } | null>(null);
-
-  const isSubscribed = profile?.subscriptionActive;
 
   useEffect(() => {
     // Show welcome screen for 5 seconds
@@ -85,19 +82,7 @@ function AppContent() {
   }, []);
 
   const handlePlay = (content: any) => {
-    if (!user) {
-      signIn();
-      return;
-    }
-
-    // Live channels and store are free
-    const isFree = content.streamUrl || activeTab === 'live';
-    
-    if (!isSubscribed && !isFree) {
-      setShowPaywall(true);
-    } else {
-      setSelectedMovie(content);
-    }
+    setSelectedMovie(content);
   };
 
   return (
@@ -209,9 +194,13 @@ function AppContent() {
               </nav>
 
               <div className="pt-8 border-t border-white/10">
-                {!isSubscribed ? (
-                  <button className="w-full bg-llano-gold text-llano-black py-4 rounded-2xl font-bold text-lg">
-                    Suscribirse a Premium
+                {!user ? (
+                  <button 
+                    onClick={signIn}
+                    className="w-full bg-llano-gold text-llano-black py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2"
+                  >
+                    <LogIn className="w-5 h-5" />
+                    Iniciar Sesión
                   </button>
                 ) : (
                   <button 
@@ -430,8 +419,8 @@ function AppContent() {
                 </div>
                 <div className="text-center">
                   <h2 className="text-3xl font-bold">{user?.displayName || 'Usuario'}</h2>
-                  <p className={`font-medium ${isSubscribed ? 'text-llano-gold' : 'text-white/40'}`}>
-                    {isSubscribed ? 'Plan Premium' : 'Plan Gratuito'}
+                  <p className="text-white/40 font-medium">
+                    Cuenta Llanera
                   </p>
                 </div>
               </div>
@@ -524,64 +513,6 @@ function AppContent() {
               onClose={() => setSelectedMovie(null)} 
               onSelectMovie={(movie) => setSelectedMovie(movie)}
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Paywall Modal */}
-      <AnimatePresence>
-        {showPaywall && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-llano-black/90 backdrop-blur-xl"
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              className="bg-gradient-to-br from-llano-black to-white/5 border border-llano-gold/30 p-6 md:p-8 rounded-[2rem] max-w-md w-full text-center space-y-6 shadow-2xl shadow-llano-gold/10"
-            >
-              <div className="w-20 h-20 bg-llano-gold/20 rounded-full flex items-center justify-center mx-auto border border-llano-gold/30">
-                <Lock className="w-10 h-10 text-llano-gold" />
-              </div>
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold">Contenido Premium</h2>
-                <p className="text-white/60">
-                  Suscríbete a Llanera TV+ para acceder a todo nuestro catálogo exclusivo y canales en vivo sin límites.
-                </p>
-              </div>
-              <div className="bg-white/5 p-6 rounded-2xl border border-white/10 space-y-2">
-                <p className="text-llano-gold font-bold text-4xl">$9.99<span className="text-sm text-white/40 font-normal">/mes</span></p>
-                <p className="text-sm text-white/40">Cancela en cualquier momento</p>
-              </div>
-              <button
-                onClick={async () => {
-                  if (!user) {
-                    await signIn();
-                  }
-                  // Simulate payment activation
-                  if (user) {
-                    const { doc, updateDoc } = await import('firebase/firestore');
-                    const { db } = await import('./firebase');
-                    await updateDoc(doc(db, 'users', user.uid), {
-                      subscriptionActive: true,
-                      planType: 'monthly'
-                    });
-                    setShowPaywall(false);
-                  }
-                }}
-                className="w-full bg-llano-gold text-llano-black py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform"
-              >
-                {user ? 'Suscribirme Ahora' : 'Ingresar para Suscribirse'}
-              </button>
-              <button
-                onClick={() => setShowPaywall(false)}
-                className="text-white/40 font-medium hover:text-white transition-colors"
-              >
-                Tal vez más tarde
-              </button>
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
